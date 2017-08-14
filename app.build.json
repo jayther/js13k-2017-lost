@@ -44,7 +44,6 @@
   "concat": {
     "js": {
       "files": [
-        "src/js/lib/TinyCanvas.js",
         "src/js/src/main.js"
       ],
       "output": "src/js/bundle.js"

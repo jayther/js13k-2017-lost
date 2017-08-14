@@ -1,0 +1,68 @@
+{
+  "game": {
+    "title": "Lost",
+    "width": 640,
+    "height": 360
+  },
+  "export": {
+    "path": "build",
+    "files": [
+      { "from": "src/js/b.js", "to": "." },
+      { "from": "src/style/c.css", "to": "." },
+      { "from": "src/views/index.html", "to": "." }
+    ]
+  },
+  "templates": {
+    "indexHtml": {
+      "from": "src/templates/index.html",
+      "to": "src/views/index.html",
+      "extraSettings": {
+        "page": {
+          "css": "c.css",
+          "js": "b.js"
+        }
+      }
+    },
+    "indexHtmlDev": {
+      "from": "src/templates/index.html",
+      "to": "src/views/dev.html",
+      "extraSettings": {
+        "page": {
+          "css": "c.css",
+          "js": "bundle-wrap.js"
+        }
+      }
+    }
+  },
+  "sass": {
+    "from": "src/style/main.scss",
+    "to": "src/style/c.css",
+    "options": {
+      "outputStyle": "compressed"
+    }
+  },
+  "concat": {
+    "js": {
+      "files": [
+        "src/js/lib/TinyCanvas.js",
+        "src/js/src/main.js"
+      ],
+      "output": "src/js/bundle.js"
+    }
+  },
+  "wrap": {
+    "wrapper": "src/templates/wrapper.js",
+    "from": "src/js/bundle.js",
+    "to": "src/js/bundle-wrap.js"
+  },
+  "es6": {
+    "from": "src/js/src-es6/**/*.js",
+    "to": "src/js/src",
+    "presets": ["env"],
+    "plugins": ["external-helpers"]
+  },
+  "minify": {
+    "from": "src/js/bundle-wrap.js",
+    "to": "src/js/b.js"
+  }
+}

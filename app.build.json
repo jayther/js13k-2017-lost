@@ -15,7 +15,7 @@
   "templates": {
     "indexHtml": {
       "from": "src/templates/index.html",
-      "to": "src/views/index.html",
+      "to": "src/views/index-nomin.html",
       "extraSettings": {
         "page": {
           "css": "c.css",
@@ -62,7 +62,18 @@
     "plugins": ["external-helpers"]
   },
   "minify": {
-    "from": "src/js/bundle-wrap.js",
-    "to": "src/js/b.js"
+    "js": {
+      "from": "src/js/bundle-wrap.js",
+      "to": "src/js/b.js"
+    },
+    "html": {
+      "from": "src/views/index-nomin.html",
+      "to": "src/views/index.html",
+      "options": {
+        "collapseWhitespace": true,
+        "removeAttributeQuotes": true,
+        "removeComments": true
+      }
+    }
   }
 }

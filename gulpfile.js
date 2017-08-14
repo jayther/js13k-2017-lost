@@ -13,6 +13,7 @@ const path = require('path'),
   zip = require('gulp-zip'),
   size = require('gulp-size'),
   micro = require('gulp-micro'),
+  htmlmin = require('gulp-htmlmin'),
   express = require('express'),
   del = require('del'),
   Q = require('q');
@@ -66,10 +67,10 @@ gulp.task('wrap-js', ['concat-js'], () => {
 });
 
 gulp.task('minify-js', ['wrap-js'], () => {
-  return gulp.src(appBuild.minify.from)
+  return gulp.src(appBuild.minify.js.from)
     .pipe(uglify())
-    .pipe(rename(path.basename(appBuild.minify.to)))
-    .pipe(gulp.dest(path.dirname(appBuild.minify.to)));
+    .pipe(rename(path.basename(appBuild.minify.js.to)))
+    .pipe(gulp.dest(path.dirname(appBuild.minify.js.to)));
 });
 
 gulp.task('sass-css', () => {
@@ -87,11 +88,18 @@ gulp.task('render-html', () => {
   return renderTemplate(appBuild.templates.indexHtml, appBuild);
 });
 
+gulp.task('minify-html', ['render-html'], () => {
+  return gulp.src(appBuild.minify.html.from)
+    .pipe(htmlmin(appBuild.minify.html.options))
+    .pipe(rename(path.basename(appBuild.minify.html.to)))
+    .pipe(gulp.dest(path.dirname(appBuild.minify.html.to)));
+});
+
 gulp.task('build-js-dev', ['wrap-js']);
 gulp.task('build-js', ['minify-js']);
 
 gulp.task('build-html-dev', ['render-html-dev']);
-gulp.task('build-html', ['render-html']);
+gulp.task('build-html', ['minify-html']);
 
 gulp.task('build-css', ['sass-css']);
 

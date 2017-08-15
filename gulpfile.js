@@ -44,6 +44,7 @@ function reloadSettings() {
 reloadSettings();
 
 gulp.task('babel', () => {
+  throw new Error('Unused!');
   del.sync(appBuild.es6.to);
   return gulp.src(appBuild.es6.from)
     .pipe(babel({
@@ -52,7 +53,7 @@ gulp.task('babel', () => {
     .pipe(gulp.dest(appBuild.es6.to));
 });
 
-gulp.task('concat-js', ['babel'], () => {
+gulp.task('concat-js', () => {
   return gulp.src(appBuild.concat.js.files)
     .pipe(concat(path.basename(appBuild.concat.js.output)))
     .pipe(gulp.dest(path.dirname(appBuild.concat.js.output)));

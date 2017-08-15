@@ -69,7 +69,7 @@ gulp.task('wrap-js', ['concat-js'], () => {
 
 gulp.task('minify-js', ['wrap-js'], () => {
   return gulp.src(appBuild.minify.js.from)
-    .pipe(uglify())
+    .pipe(uglify(appBuild.minify.js.options))
     .pipe(rename(path.basename(appBuild.minify.js.to)))
     .pipe(gulp.dest(path.dirname(appBuild.minify.js.to)));
 });

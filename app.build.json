@@ -44,6 +44,7 @@
   "concat": {
     "js": {
       "files": [
+        "src/js/src/utils/DOM.js",
         "src/js/src/main.js"
       ],
       "output": "src/js/bundle.js"
@@ -63,7 +64,29 @@
   "minify": {
     "js": {
       "from": "src/js/bundle-wrap.js",
-      "to": "src/js/b.js"
+      "to": "src/js/b.js",
+      "options": {
+        "mangle": {
+          "properties": {
+            "reserved": [
+              "getElementById",
+              "createElement",
+              "width",
+              "height",
+              "prototype",
+              "getContext",
+              "game",
+              "fillStyle",
+              "strokeStyle",
+              "shadowColor",
+              "shadowBlur",
+              "shadowOffsetX",
+              "shadowOffsetY",
+              "createLinearGradient"
+            ]
+          }
+        }
+      }
     },
     "html": {
       "from": "src/views/index-nomin.html",

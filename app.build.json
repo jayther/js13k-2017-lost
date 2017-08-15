@@ -79,6 +79,10 @@
         "mangle": {
           "properties": {
             "reserved": [
+              "keyCode",
+              "addEventListener",
+              "removeEventListener",
+              "appendChild",
               "preventDefault",
               "requestAnimationFrame",
               "getElementById",

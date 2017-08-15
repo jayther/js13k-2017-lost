@@ -46,6 +46,15 @@
       "files": [
         "src/js/src/utils/Polyfills.js",
         "src/js/src/utils/DOM.js",
+        "src/js/src/input/KB.js",
+        
+        "src/js/src/graphics/DisplayItem.js",
+        "src/js/src/graphics/DisplayContainer.js",
+        "src/js/src/graphics/DisplayRect.js",
+        
+        "src/js/src/scenes/Scene.js",
+        "src/js/src/scenes/TestScene.js",
+        
         "src/js/src/main.js"
       ],
       "output": "src/js/bundle.js"
@@ -70,6 +79,8 @@
         "mangle": {
           "properties": {
             "reserved": [
+              "preventDefault",
+              "requestAnimationFrame",
               "getElementById",
               "createElement",
               "width",
@@ -83,7 +94,49 @@
               "shadowBlur",
               "shadowOffsetX",
               "shadowOffsetY",
-              "createLinearGradient"
+              "createLinearGradient",
+              "createPattern",
+              "createRadialGradient",
+              "addColorStop",
+              "lineCap",
+              "lineJoin",
+              "lineWidth",
+              "miterLimit",
+              "rect",
+              "fillRect",
+              "strokeRect",
+              "clearRect",
+              "fill",
+              "stroke",
+              "beginPath",
+              "moveTo",
+              "closePath",
+              "lineTo",
+              "clip",
+              "quadraticCurveTo",
+              "bezierCurveTo",
+              "arc",
+              "arcTo",
+              "isPointInPath",
+              "scale",
+              "rotate",
+              "translate",
+              "transform",
+              "setTransform",
+              "font",
+              "textAlign",
+              "textBaseline",
+              "fillText",
+              "strokeText",
+              "measureText",
+              "drawImage",
+              "createImageData",
+              "getImageData",
+              "putImageData",
+              "globalAlpha",
+              "globalCompositeOperation",
+              "save",
+              "restore"
             ]
           }
         }

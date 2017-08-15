@@ -22,3 +22,7 @@ function extend(target, varArgs) {
   }
   return to;
 }
+
+function extendPrototype() {
+  return extend.apply(this, [{}].concat(Array.prototype.slice.call(arguments)));
+}

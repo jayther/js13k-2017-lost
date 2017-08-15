@@ -44,6 +44,7 @@
   "concat": {
     "js": {
       "files": [
+        "src/js/src/utils/Polyfills.js",
         "src/js/src/utils/DOM.js",
         "src/js/src/main.js"
       ],

@@ -1,5 +1,5 @@
 function Main(){
-  this.root = document.getElementById('root');
+  this.root = DOM.get('root');
   this.rawr = '';
   this.init();
 }

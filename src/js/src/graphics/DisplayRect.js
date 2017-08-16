@@ -1,17 +1,17 @@
 function DisplayRect(options) {
   DisplayItem.apply(this, arguments);
   var opts = extend({
-    width: 0,
-    height: 0,
-    fillStyle: 'black'
+    w: 0,
+    h: 0,
+    color: 'black'
   }, options || {});
-  this.width = opts.width;
-  this.height = opts.height;
-  this.fillStyle = opts.fillStyle;
+  this.w = opts.w;
+  this.h = opts.h;
+  this.color = opts.color;
 }
 DisplayRect.prototype = extendPrototype(DisplayItem.prototype, {
   render: function (context) {
-    context.fillStyle = this.fillStyle;
-    context.fillRect(0, 0, this.width, this.height);
+    context.fillStyle = this.color;
+    context.fillRect(0, 0, this.w, this.h);
   }
 });

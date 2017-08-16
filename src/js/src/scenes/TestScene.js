@@ -2,9 +2,9 @@ function TestScene() {
   Scene.apply(this, arguments);
   var vel = { x: 0, y: 0 };
   var rect = this.rect = new DisplayRect({
-    width: 10,
-    height: 10,
-    fillStyle: 'blue'
+    w: 10,
+    h: 10,
+    color: 'blue'
   });
   this.addChild(this.rect);
   this.keys = [];

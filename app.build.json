@@ -52,6 +52,8 @@
         "src/js/src/graphics/DisplayContainer.js",
         "src/js/src/graphics/DisplayRect.js",
         
+        "src/js/src/play/World.js",
+        
         "src/js/src/scenes/Scene.js",
         "src/js/src/scenes/TestScene.js",
         

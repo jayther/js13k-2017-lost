@@ -1,5 +1,8 @@
 function TestScene() {
   Scene.apply(this, arguments);
+  this.world = new World();
+  this.addChild(this.world);
+  this.world.generate();
   var vel = { x: 0, y: 0 };
   var rect = this.rect = new DisplayRect({
     w: 10,

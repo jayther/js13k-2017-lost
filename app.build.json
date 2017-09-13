@@ -47,6 +47,8 @@
         "src/js/src/utils/Polyfills.js",
         "src/js/src/utils/DOM.js",
         "src/js/src/input/KB.js",
+        "src/js/src/math/Random.js",
+        "src/js/src/math/JMath.js",
         
         "src/js/src/graphics/DisplayItem.js",
         "src/js/src/graphics/DisplayContainer.js",

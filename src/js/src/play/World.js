@@ -4,10 +4,10 @@ function World() {
   this.grid = {};
   this.cellSize = 20;
   this.gridRange = {
-    minWidth: 75,
-    maxWidth: 100,
-    minHeight: 75,
-    maxHeight: 100
+    minWidth: 50,
+    maxWidth: 60,
+    minHeight: 50,
+    maxHeight: 60
   };
   this.hallwayMinChunkArea = 1000;
   this.hallwayMinChunkWidth = 20;

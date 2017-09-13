@@ -18,6 +18,7 @@ function World() {
   this.hallwaySize = 2;
   this.gridWidth = 0;
   this.gridHeight = 0;
+  this.rooms = [];
 }
 World.cellTypes = {
   ground: 1,
@@ -25,6 +26,17 @@ World.cellTypes = {
   door: 3,
   roomGround: 4
 };
+World.relativePos = [
+  { x: 0, y: 0 },
+  { x: 1, y: 0 },
+  { x: 1, y: 1 },
+  { x: 0, y: 1 },
+  { x: -1, y: 1 },
+  { x: -1, y: 0 },
+  { x: -1, y: -1 },
+  { x: 0, y: -1 },
+  { x: 1, y: -1 }
+];
 
 World.prototype = extendPrototype(DisplayContainer.prototype, {
   generate: function () {
@@ -155,6 +167,8 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
           x = chunkA.right - chunkA.left;
           y = chunkA.bottom - chunkA.top;
           if (x > minWidth && y > minHeight && x * y > minArea) {
+            // try to split based on which direction is longer
+            chunkA.splitDir = x > y ? 0 : 1;
             chunkPool.push(chunkA);
             finalChunks.splice(i, 1);
           }
@@ -166,6 +180,14 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
     }
     for (i = 0; i < finalChunks.length; i += 1) {
       chunk = finalChunks[i];
+      // room floor graphic
+      this.addChild(new DisplayRect({
+        x: chunk.left * this.cellSize,
+        y: chunk.top * this.cellSize,
+        w: (chunk.right - chunk.left) * this.cellSize,
+        h: (chunk.bottom - chunk.top) * this.cellSize,
+        color: '#999999'
+      }));
       // put walls around final chunks
       for (x = chunk.left - 1; x < chunk.right + 1; x += 1) {
         this.setPos(x, chunk.top - 1, World.cellTypes.outerWall);
@@ -229,36 +251,46 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
           y = hallway.top - 1;
         }
         this.setPos(x, y, World.cellTypes.door);
+        this.rooms.push(chunk);
       }
     }
   },
   createCell: function (x, y, type) {
-    var color = '#000000';
+    var color = null,
+      aabb = null,
+      halfSize = this.cellSize / 2,
+      item = null;
     switch (type) {
     case World.cellTypes.outerWall: // wall
       color = '#000000';
+      aabb = new AABB(
+        (x * this.cellSize + halfSize),
+        (y * this.cellSize + halfSize),
+        halfSize,
+        halfSize
+      );
       break;
     case World.cellTypes.ground: // floor
-      color = '#dddddd';
       break;
     case World.cellTypes.door:
       color = '#00aa00';
       break;
     case World.cellTypes.roomGround:
-      color = '#999999';
       break;
     }
-    var item = new DisplayRect({
-      x: x * this.cellSize,
-      y: y * this.cellSize,
-      w: this.cellSize,
-      h: this.cellSize,
-      color: color 
-    });
+    if (color) {
+      item = new DisplayRect({
+        x: x * this.cellSize,
+        y: y * this.cellSize,
+        w: this.cellSize,
+        h: this.cellSize,
+        color: color 
+      });
+    }
     return {
       type: type,
       item: item,
-      aabb: null
+      aabb: aabb
     };
   },
   getCell: function (x, y) {
@@ -272,11 +304,30 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
       this.grid[x] = {};
     }
     var cell = this.grid[x][y];
-    if (cell) {
+    if (cell && cell.item) {
       this.removeChild(cell.item);
     }
     cell = this.createCell(x, y, type);
     this.grid[x][y] = cell;
-    this.addChild(cell.item);
+    if (cell.item) {
+      this.addChild(cell.item);
+    }
+  },
+  getCellsAroundPos: function (x, y) {
+    var cells = [];
+    var cellX = Math.floor(x / this.cellSize);
+    var cellY = Math.floor(y / this.cellSize);
+    var cell = null;
+    var relativePos = World.relativePos;
+    var pos, i;
+    for (i = 0; i < relativePos.length; i += 1) {
+      pos = relativePos[i];
+      cell = this.getCell(cellX + pos.x, cellY + pos.y);
+      if (cell) {
+        cells.push(cell);
+      }
+    }
+    
+    return cells;
   }
 });

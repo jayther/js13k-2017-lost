@@ -49,15 +49,17 @@
         "src/js/src/input/KB.js",
         "src/js/src/math/Random.js",
         "src/js/src/math/JMath.js",
+        "src/js/src/math/AABB.js",
         
         "src/js/src/graphics/DisplayItem.js",
         "src/js/src/graphics/DisplayContainer.js",
         "src/js/src/graphics/DisplayRect.js",
         
         "src/js/src/play/World.js",
+        "src/js/src/play/Player.js",
         
         "src/js/src/scenes/Scene.js",
-        "src/js/src/scenes/TestScene.js",
+        "src/js/src/scenes/PlayScene.js",
         
         "src/js/src/main.js"
       ],

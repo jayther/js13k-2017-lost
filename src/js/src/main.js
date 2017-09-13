@@ -7,7 +7,7 @@ function Main(){
   this.root.appendChild(canvas);
   this.canvas = canvas;
   this.context = canvas.getContext('2d');
-  this.scene = new TestScene(this);
+  this.scene = new PlayScene(this);
   this.time = 0;
   this.step(0);
 }

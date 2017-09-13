@@ -1,4 +1,4 @@
-function TestScene() {
+function PlayScene() {
   Scene.apply(this, arguments);
   var bg = new DisplayRect({
     w: SETTINGS.width,
@@ -9,21 +9,23 @@ function TestScene() {
   this.world = new World();
   this.addChild(this.world);
   this.world.generate();
-  var w = this.world.gridWidth * this.world.cellSize;
+  /*var w = this.world.gridWidth * this.world.cellSize;
   var h = this.world.gridHeight * this.world.cellSize;
   if (w / h > SETTINGS.width / SETTINGS.height) {
     this.world.scaleX = this.world.scaleY = SETTINGS.width / w;
   } else {
     this.world.scaleX = this.world.scaleY = SETTINGS.height / h;
-  }
-  var speed = 100;
-  var vel = { x: 0, y: 0 };
-  var rect = this.rect = new DisplayRect({
-    w: 10,
-    h: 10,
-    color: 'blue'
+  }*/
+  var speed = 200;
+  var player = this.player = new Player({
+    world: this.world
   });
-  this.world.addChild(this.rect);
+  this.world.addChild(this.player);
+  var room = Random.pick(this.world.rooms);
+  this.player.x = (room.left + room.right) / 2 * this.world.cellSize;
+  this.player.y = (room.top + room.bottom) / 2 * this.world.cellSize;
+  this.player.updateAABB();
+  var vel = this.player.vel;
   this.keys = [];
   this.aKey = KB(KB.keys.a, function () {
     vel.x += -speed;
@@ -50,16 +52,13 @@ function TestScene() {
   });
   this.keys.push(this.wKey);
   
+  this.addSteppable(this.player.step.bind(this.player));
   this.addSteppable(function (dts) {
-    rect.x += vel.x * dts;
-    rect.y += vel.y * dts;
-  });
-  this.addSteppable(function (dts) {
-    /*this.world.x = SETTINGS.width / 2 - rect.x;
-    this.world.y = SETTINGS.height / 2 - rect.y;*/
+    this.world.x = SETTINGS.width / 2 - player.x;
+    this.world.y = SETTINGS.height / 2 - player.y;
   }.bind(this));
 }
-TestScene.prototype = extendPrototype(Scene.prototype, {
+PlayScene.prototype = extendPrototype(Scene.prototype, {
   destroy: function () {
     this.keys.forEach(function (key) {
       key.destroy();

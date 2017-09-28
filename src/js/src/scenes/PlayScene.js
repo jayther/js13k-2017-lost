@@ -54,8 +54,8 @@ function PlayScene() {
   
   this.addSteppable(this.player.step.bind(this.player));
   this.addSteppable(function (dts) {
-    this.world.x = SETTINGS.width / 2 - player.x;
-    this.world.y = SETTINGS.height / 2 - player.y;
+    this.world.x = Math.floor(SETTINGS.width / 2 - player.x);
+    this.world.y = Math.floor(SETTINGS.height / 2 - player.y);
   }.bind(this));
 }
 PlayScene.prototype = extendPrototype(Scene.prototype, {

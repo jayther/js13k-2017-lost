@@ -42,6 +42,16 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
   generate: function () {
     var w = Random.rangeInt(this.gridRange.minWidth, this.gridRange.maxWidth);
     var h = Random.rangeInt(this.gridRange.minHeight, this.gridRange.maxHeight);
+    
+    // hallway floor
+    this.addChild(new DisplayRect({
+      x: 0 * this.cellSize,
+      y: 0 * this.cellSize,
+      w: w * this.cellSize,
+      h: h * this.cellSize,
+      color: '#656565'
+    }));
+    
     var i, j, x, y;
     
     this.gridWidth = w;

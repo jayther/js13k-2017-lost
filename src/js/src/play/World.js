@@ -19,6 +19,9 @@ function World() {
   this.gridWidth = 0;
   this.gridHeight = 0;
   this.rooms = [];
+  
+  this.bg = new CachedContainer();
+  this.addChild(this.bg);
 }
 World.cellTypes = {
   ground: 1,
@@ -42,9 +45,10 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
   generate: function () {
     var w = Random.rangeInt(this.gridRange.minWidth, this.gridRange.maxWidth);
     var h = Random.rangeInt(this.gridRange.minHeight, this.gridRange.maxHeight);
+    this.bg.setDimensions(w * this.cellSize, h * this.cellSize);
     
     // building walls
-    this.addChild(new DisplayRect({
+    this.bg.addChild(new DisplayRect({
       x: 0 * this.cellSize,
       y: 0 * this.cellSize,
       w: w * this.cellSize,
@@ -53,7 +57,7 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
     }));
     
     // hallway floor
-    this.addChild(new DisplayRect({
+    this.bg.addChild(new DisplayRect({
       x: 1 * this.cellSize,
       y: 1 * this.cellSize,
       w: (w - 2) * this.cellSize,
@@ -201,7 +205,7 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
     for (i = 0; i < finalChunks.length; i += 1) {
       chunk = finalChunks[i];
       // room walls
-      this.addChild(new DisplayRect({
+      this.bg.addChild(new DisplayRect({
         x: (chunk.left - 1) * this.cellSize,
         y: (chunk.top - 1) * this.cellSize,
         w: (chunk.right - chunk.left + 2) * this.cellSize,
@@ -210,7 +214,7 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
       }));
       
       // room floor graphic
-      this.addChild(new DisplayRect({
+      this.bg.addChild(new DisplayRect({
         x: chunk.left * this.cellSize,
         y: chunk.top * this.cellSize,
         w: (chunk.right - chunk.left) * this.cellSize,

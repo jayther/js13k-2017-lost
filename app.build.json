@@ -54,6 +54,7 @@
         "src/js/src/graphics/DisplayItem.js",
         "src/js/src/graphics/DisplayContainer.js",
         "src/js/src/graphics/DisplayRect.js",
+        "src/js/src/graphics/CachedContainer.js",
         
         "src/js/src/play/World.js",
         "src/js/src/play/Player.js",

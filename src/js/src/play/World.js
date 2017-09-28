@@ -43,12 +43,21 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
     var w = Random.rangeInt(this.gridRange.minWidth, this.gridRange.maxWidth);
     var h = Random.rangeInt(this.gridRange.minHeight, this.gridRange.maxHeight);
     
-    // hallway floor
+    // building walls
     this.addChild(new DisplayRect({
       x: 0 * this.cellSize,
       y: 0 * this.cellSize,
       w: w * this.cellSize,
       h: h * this.cellSize,
+      color: '#000000'
+    }));
+    
+    // hallway floor
+    this.addChild(new DisplayRect({
+      x: 1 * this.cellSize,
+      y: 1 * this.cellSize,
+      w: (w - 2) * this.cellSize,
+      h: (h - 2) * this.cellSize,
       color: '#656565'
     }));
     
@@ -191,6 +200,15 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
     var islandRooms = [], rectCheck;
     for (i = 0; i < finalChunks.length; i += 1) {
       chunk = finalChunks[i];
+      // room walls
+      this.addChild(new DisplayRect({
+        x: (chunk.left - 1) * this.cellSize,
+        y: (chunk.top - 1) * this.cellSize,
+        w: (chunk.right - chunk.left + 2) * this.cellSize,
+        h: (chunk.bottom - chunk.top + 2) * this.cellSize,
+        color: '#000000'
+      }));
+      
       // room floor graphic
       this.addChild(new DisplayRect({
         x: chunk.left * this.cellSize,
@@ -341,7 +359,6 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
       item = null;
     switch (type) {
     case World.cellTypes.outerWall: // wall
-      color = '#000000';
       aabb = new AABB(
         (x * this.cellSize + halfSize),
         (y * this.cellSize + halfSize),

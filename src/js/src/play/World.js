@@ -188,6 +188,7 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
     if (splitCount >= 10000) {
       throw new Error('Infinite loop');
     }
+    var islandRooms = [], rectCheck;
     for (i = 0; i < finalChunks.length; i += 1) {
       chunk = finalChunks[i];
       // room floor graphic
@@ -214,8 +215,8 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
         }
       }
       // connect rooms to hallways
-      var neighborHallways = [];
-      var rectCheck = extend({}, chunk);
+      var neighbors = [];
+      rectCheck = extend({}, chunk);
       rectCheck.left -= 2;
       rectCheck.top -= 2;
       rectCheck.right += 2;
@@ -223,11 +224,11 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
       for (j = 0; j < hallways.length; j += 1) {
         hallway = hallways[j];
         if (JMath.intersectRectRect(rectCheck, hallway)) {
-          neighborHallways.push(hallway);
+          neighbors.push(hallway);
         }
       }
-      if (neighborHallways.length > 0) {
-        hallway = Random.pick(neighborHallways);
+      if (neighbors.length > 0) { // has a hallway neighbor
+        hallway = Random.pick(neighbors);
         // determine direction
         rectCheck.top = chunk.top;
         rectCheck.right = chunk.right;
@@ -261,8 +262,76 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
           y = hallway.top - 1;
         }
         this.setPos(x, y, World.cellTypes.door);
+        chunk.connected = true;
         this.rooms.push(chunk);
+      } else {
+        // island room
+        chunk.connected = false;
+        islandRooms.push(chunk);
       }
+    }
+    // keep connecting island rooms, it should eventually run out
+    splitCount = 0;
+    while (islandRooms.length > 0 && splitCount < 10000) {
+      chunk = islandRooms.shift();
+      rectCheck = extend({}, chunk);
+      rectCheck.left -= 2;
+      rectCheck.top -= 2;
+      rectCheck.right += 2;
+      rectCheck.bottom += 2;
+      neighbors = [];
+      for (j = 0; j < this.rooms.length; j += 1) {
+        chunkA = this.rooms[j];
+        if (JMath.intersectRectRect(rectCheck, chunkA)) {
+          neighbors.push(chunkA);
+        }
+      }
+      if (neighbors.length > 0) { // has a connected neighbor
+        chunkA = Random.pick(neighbors);
+        // determine direction
+        rectCheck.top = chunk.top;
+        rectCheck.right = chunk.right;
+        rectCheck.bottom = chunk.bottom;
+        var found = false;
+        if (JMath.intersectRectRect(rectCheck, chunkA)) {
+          found = true;
+          x = chunkA.right;
+          y = Random.rangeInt(chunk.top, chunk.bottom);
+        }
+        if (!found) {
+          rectCheck.left = chunk.left;
+          rectCheck.top -= 2;
+          if (JMath.intersectRectRect(rectCheck, chunkA)) {
+            found = true;
+            x = Random.rangeInt(chunk.left, chunk.right);
+            y = chunkA.bottom;
+          }
+        }
+        if (!found) {
+          rectCheck.top = chunk.top;
+          rectCheck.right += 2;
+          if (JMath.intersectRectRect(rectCheck, chunkA)) {
+            found = true;
+            x = chunkA.left - 1;
+            y = Random.rangeInt(chunk.top, chunk.bottom);
+          }
+        }
+        if (!found) {
+          x = Random.rangeInt(chunk.left, chunk.right);
+          y = chunkA.top - 1;
+        }
+        this.setPos(x, y, World.cellTypes.door);
+        chunk.connected = true;
+        this.rooms.push(chunk);
+      } else {
+        // this is currently surrounded by other island rooms
+        chunk.connected = false;
+        islandRooms.push(chunk);
+      }
+      splitCount += 1;
+    }
+    if (splitCount >= 10000) {
+      throw new Error('Infinite loop');
     }
   },
   createCell: function (x, y, type) {

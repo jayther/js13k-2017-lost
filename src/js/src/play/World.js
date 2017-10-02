@@ -150,6 +150,7 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
           hallway[upperBoundSide] = splitPos + this.hallwaySize / 2;
           hallway[lowerBoundSide] = splitPos - this.hallwaySize / 2;
         }
+        hallway.hallway = true;
         hallways.push(hallway);
       } else { // split chunks into 2
         chunkB = extend({}, chunk);

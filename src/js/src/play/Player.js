@@ -1,5 +1,6 @@
-function Player(settings) {
-  DisplayContainer.apply(this, arguments);
+function Player(scene, settings) {
+  DisplayContainer.call(this, settings);
+  this.scene = scene;
   var s = extend({
     world: null
   }, settings || {});
@@ -56,11 +57,19 @@ Player.prototype = extendPrototype(DisplayContainer.prototype, {
     // fog reveal/refog
     cell = this.world.getCellFromPos(this.x, this.y);
     if (cell && cell.room && this.currentRoom !== cell.room) {
-      if (this.currentRoom) {
-        this.currentRoom.fog.visible = true;
-      }
+      var previousRoom = this.currentRoom;
       this.currentRoom = cell.room;
-      this.currentRoom.fog.visible = false;
+      // if previous room is set and not hallway to hallway
+      if (previousRoom && !(previousRoom.hallway && this.currentRoom.hallway)) {
+        this.scene.main.animManager.add(new Anim({
+          object: previousRoom.fog,
+          property: 'alpha',
+          from: 0,
+          to: 1,
+          duration: 0.5
+        }));
+      }
+      this.currentRoom.fog.alpha = 0;
     }
   }
 });

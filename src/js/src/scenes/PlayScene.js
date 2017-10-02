@@ -20,7 +20,7 @@ function PlayScene() {
     }
   }
   var speed = 200;
-  var player = this.player = new Player({
+  var player = this.player = new Player(this, {
     world: this.world
   });
   this.world.addChild(this.player);

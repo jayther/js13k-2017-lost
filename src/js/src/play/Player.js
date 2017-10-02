@@ -9,7 +9,7 @@ function Player(settings) {
     y: 0
   };
   this.world = s.world;
-  
+  this.currentRoom = null;
   var rect = this.rect = new DisplayRect({
     x: -5,
     y: -5,
@@ -28,6 +28,7 @@ Player.prototype = extendPrototype(DisplayContainer.prototype, {
     this.y += this.vel.y * dts;
     this.updateAABB();
     
+    // player collision with cells
     var cells = this.world.getCellsAroundPos(this.x, this.y), i, cell;
     var relX, relY;
     for (i = 0; i < cells.length; i += 1) {
@@ -50,6 +51,16 @@ Player.prototype = extendPrototype(DisplayContainer.prototype, {
         }
         this.updateAABB();
       }
+    }
+    
+    // fog reveal/refog
+    cell = this.world.getCellFromPos(this.x, this.y);
+    if (cell && cell.room && this.currentRoom !== cell.room) {
+      if (this.currentRoom) {
+        this.currentRoom.fog.visible = true;
+      }
+      this.currentRoom = cell.room;
+      this.currentRoom.fog.visible = false;
     }
   }
 });

@@ -201,6 +201,18 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
     if (splitCount >= 10000) {
       throw new Error('Infinite loop in partitioning');
     }
+    
+    // reference cells to hallways
+    for (i = 0; i < hallways.length; i += 1) {
+      hallway = hallways[i];
+      for (x = hallway.left; x < hallway.right; x += 1) {
+        for (y = hallway.top; y < hallway.bottom; y += 1) {
+          this.setPos(x, y, World.cellTypes.ground, hallway);
+        }
+      }
+    }
+    
+    // room creation
     var islandRooms = [], rectCheck;
     for (i = 0; i < finalChunks.length; i += 1) {
       chunk = finalChunks[i];
@@ -233,13 +245,15 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
       // set room cells as room ground
       for (x = chunk.left; x < chunk.right; x += 1) {
         for (y = chunk.top; y < chunk.bottom; y += 1) {
-          this.setPos(x, y, World.cellTypes.roomGround);
+          this.setPos(x, y, World.cellTypes.roomGround, chunk);
         }
       }
       // add to islandRooms
       chunk.connected = false;
       islandRooms.push(chunk);
     }
+    
+    // connect rooms
     // first pass: connect island rooms to hallways, or add back to island room stack
     // second pass: keep connecting island rooms, it should eventually run out
     splitCount = 0;
@@ -338,8 +352,35 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
     if (splitCount >= 10000) {
       throw new Error('Infinite loop in door placements');
     }
+    var fog;
+    // room fog
+    for (i = 0; i < this.rooms.length; i += 1) {
+      chunk = this.rooms[i];
+      fog = new DisplayRect({
+        x: Math.floor((chunk.left - 0.5) * this.cellSize),
+        y: Math.floor((chunk.top - 0.5) * this.cellSize),
+        w: Math.floor((chunk.right - chunk.left + 1) * this.cellSize),
+        h: Math.floor((chunk.bottom - chunk.top + 1) * this.cellSize)
+      });
+      this.addChild(fog);
+      chunk.fog = fog;
+    }
+    // hallway fog
+    var hallwayFog = new DisplayContainer();
+    this.addChild(hallwayFog);
+    for (i = 0; i < hallways.length; i += 1) {
+      chunk = hallways[i];
+      fog = new DisplayRect({
+        x: Math.floor((chunk.left - 0.5) * this.cellSize),
+        y: Math.floor((chunk.top - 0.5) * this.cellSize),
+        w: Math.floor((chunk.right - chunk.left + 1) * this.cellSize),
+        h: Math.floor((chunk.bottom - chunk.top + 1) * this.cellSize)
+      });
+      hallwayFog.addChild(fog);
+      chunk.fog = hallwayFog;
+    }
   },
-  createCell: function (x, y, type) {
+  createCell: function (x, y, type, room) {
     var color = null,
       aabb = null,
       halfSize = this.cellSize / 2,
@@ -373,7 +414,8 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
     return {
       type: type,
       item: item,
-      aabb: aabb
+      aabb: aabb,
+      room: room
     };
   },
   getCell: function (x, y) {
@@ -382,7 +424,7 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
     }
     return this.grid[x][y];
   },
-  setPos: function (x, y, type) {
+  setPos: function (x, y, type, room) {
     if (!this.grid[x]) {
       this.grid[x] = {};
     }
@@ -390,11 +432,17 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
     if (cell && cell.item) {
       this.removeChild(cell.item);
     }
-    cell = this.createCell(x, y, type);
+    cell = this.createCell(x, y, type, room);
     this.grid[x][y] = cell;
     if (cell.item) {
       this.addChild(cell.item);
     }
+  },
+  getCellFromPos: function (x, y) {
+    return this.getCell(
+      Math.floor(x / this.cellSize),
+      Math.floor(y / this.cellSize)
+    );
   },
   getCellsAroundPos: function (x, y) {
     var cells = [];

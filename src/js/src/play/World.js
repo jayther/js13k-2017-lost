@@ -237,24 +237,36 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
         }
       }
       // connect rooms to hallways
+      // check left/right separate from top/bottom
       var neighbors = [];
       rectCheck = extend({}, chunk);
+      // check for hallways in left or right of room
       rectCheck.left -= 2;
-      rectCheck.top -= 2;
       rectCheck.right += 2;
-      rectCheck.bottom += 2;
       for (j = 0; j < hallways.length; j += 1) {
         hallway = hallways[j];
         if (JMath.intersectRectRect(rectCheck, hallway)) {
           neighbors.push(hallway);
         }
       }
+      // check for hallways in top or bottom of room
+      rectCheck.top -= 2;
+      rectCheck.bottom += 2;
+      for (j = 0; j < hallways.length; j += 1) {
+        hallway = hallways[j];
+        if (neighbors.indexOf(hallway) < 0 && JMath.intersectRectRect(rectCheck, hallway)) {
+          neighbors.push(hallway);
+        }
+      }
       if (neighbors.length > 0) { // has a hallway neighbor
         hallway = Random.pick(neighbors);
-        // determine direction
+        // reset rectCheck
+        rectCheck.left = chunk.left;
         rectCheck.top = chunk.top;
         rectCheck.right = chunk.right;
         rectCheck.bottom = chunk.bottom;
+        // determine direction
+        rectCheck.left -= 2;
         var found = false;
         if (JMath.intersectRectRect(rectCheck, hallway)) {
           found = true;
@@ -297,23 +309,36 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
     while (islandRooms.length > 0 && splitCount < 10000) {
       chunk = islandRooms.shift();
       rectCheck = extend({}, chunk);
-      rectCheck.left -= 2;
-      rectCheck.top -= 2;
-      rectCheck.right += 2;
-      rectCheck.bottom += 2;
       neighbors = [];
+      // check for left and right of room
+      rectCheck.left -= 2;
+      rectCheck.right += 2;
       for (j = 0; j < this.rooms.length; j += 1) {
         chunkA = this.rooms[j];
         if (JMath.intersectRectRect(rectCheck, chunkA)) {
           neighbors.push(chunkA);
         }
       }
+      // check for top and bottom of room
+      rectCheck.left = chunk.left;
+      rectCheck.right = chunk.right;
+      rectCheck.top -= 2;
+      rectCheck.bottom += 2;
+      for (j = 0; j < this.rooms.length; j += 1) {
+        chunkA = this.rooms[j];
+        if (neighbors.indexOf(chunkA) < 0 && JMath.intersectRectRect(rectCheck, chunkA)) {
+          neighbors.push(chunkA);
+        }
+      }
       if (neighbors.length > 0) { // has a connected neighbor
         chunkA = Random.pick(neighbors);
-        // determine direction
+        // reset rectCheck
+        rectCheck.left = chunk.left;
         rectCheck.top = chunk.top;
         rectCheck.right = chunk.right;
         rectCheck.bottom = chunk.bottom;
+        // determine direction
+        rectCheck.left -= 2;
         var found = false;
         if (JMath.intersectRectRect(rectCheck, chunkA)) {
           found = true;

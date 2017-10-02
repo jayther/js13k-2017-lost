@@ -7,6 +7,7 @@ function Main(){
   this.root.appendChild(canvas);
   this.canvas = canvas;
   this.context = canvas.getContext('2d');
+  this.animManager = new AnimManager();
   this.scene = new PlayScene(this);
   this.time = 0;
   this.step(0);
@@ -27,6 +28,7 @@ Main.prototype = {
       }
       this.scene.step(dts);
       this.scene._render(this.context);
+      this.animManager.step(dts);
       this.time = time;
     }
     requestAnimationFrame(this.step);

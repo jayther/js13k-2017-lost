@@ -51,6 +51,9 @@
         "src/js/src/math/JMath.js",
         "src/js/src/math/AABB.js",
         
+        "src/js/src/anim/Anim.js",
+        "src/js/src/anim/AnimManager.js",
+        
         "src/js/src/graphics/DisplayItem.js",
         "src/js/src/graphics/DisplayContainer.js",
         "src/js/src/graphics/DisplayRect.js",

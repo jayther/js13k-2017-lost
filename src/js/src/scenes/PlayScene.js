@@ -9,13 +9,16 @@ function PlayScene() {
   this.world = new World();
   this.addChild(this.world);
   this.world.generate();
-  /*var w = this.world.gridWidth * this.world.cellSize;
-  var h = this.world.gridHeight * this.world.cellSize;
-  if (w / h > SETTINGS.width / SETTINGS.height) {
-    this.world.scaleX = this.world.scaleY = SETTINGS.width / w;
-  } else {
-    this.world.scaleX = this.world.scaleY = SETTINGS.height / h;
-  }*/
+  var seeWholeWorld = false;
+  if (seeWholeWorld) {
+    var w = this.world.gridWidth * this.world.cellSize;
+    var h = this.world.gridHeight * this.world.cellSize;
+    if (w / h > SETTINGS.width / SETTINGS.height) {
+      this.world.scaleX = this.world.scaleY = SETTINGS.width / w;
+    } else {
+      this.world.scaleX = this.world.scaleY = SETTINGS.height / h;
+    }
+  }
   var speed = 200;
   var player = this.player = new Player({
     world: this.world
@@ -53,10 +56,12 @@ function PlayScene() {
   this.keys.push(this.wKey);
   
   this.addSteppable(this.player.step.bind(this.player));
-  this.addSteppable(function (dts) {
-    this.world.x = Math.floor(SETTINGS.width / 2 - player.x);
-    this.world.y = Math.floor(SETTINGS.height / 2 - player.y);
-  }.bind(this));
+  if (!seeWholeWorld) {
+    this.addSteppable(function (dts) {
+      this.world.x = Math.floor(SETTINGS.width / 2 - player.x);
+      this.world.y = Math.floor(SETTINGS.height / 2 - player.y);
+    }.bind(this));
+  }
 }
 PlayScene.prototype = extendPrototype(Scene.prototype, {
   destroy: function () {

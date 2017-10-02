@@ -10,6 +10,7 @@ function Anim(settings) {
   }, settings || {});
   this.startTime = -1;
   this.endTime = -1;
+  this.cancelled = false;
 }
 Anim.easingFunctions = {
   linear: function (t) { return t; },
@@ -41,5 +42,8 @@ Anim.prototype = {
       var adjusted = this.settings.from + (this.settings.to - this.settings.from) * ratio;
       this.settings.object[this.settings.property] = adjusted;
     }
+  },
+  cancel: function () {
+    this.cancelled = true;
   }
 };

@@ -61,13 +61,23 @@ Player.prototype = extendPrototype(DisplayContainer.prototype, {
       this.currentRoom = cell.room;
       // if previous room is set and not hallway to hallway
       if (previousRoom && !(previousRoom.hallway && this.currentRoom.hallway)) {
-        this.scene.main.animManager.add(new Anim({
+        if (previousRoom.fogAnim) {
+          previousRoom.fogAnim.cancel();
+          previousRoom.fogAnim = null;
+        }
+        var anim = new Anim({
           object: previousRoom.fog,
           property: 'alpha',
           from: 0,
           to: 1,
           duration: 0.5
-        }));
+        });
+        previousRoom.fogAnim = anim;
+        this.scene.main.animManager.add(anim);
+      }
+      if (this.currentRoom.fogAnim) {
+        this.currentRoom.fogAnim.cancel();
+        this.currentRoom.fogAnim = null;
       }
       this.currentRoom.fog.alpha = 0;
     }

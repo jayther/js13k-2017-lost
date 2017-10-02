@@ -19,6 +19,7 @@ function World() {
   this.gridWidth = 0;
   this.gridHeight = 0;
   this.rooms = [];
+  this.hallways = [];
   
   this.bg = new CachedContainer();
   this.addChild(this.bg);
@@ -163,7 +164,11 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
       x = chunkA.right - chunkA.left;
       y = chunkA.bottom - chunkA.top;
       if (x > minWidth && y > minHeight && x * y > minArea) {
-        chunkA.splitDir = splitDir ? 0 : 1;
+        if (pass === 0) {
+          chunkA.splitDir = splitDir ? 0 : 1;
+        } else {
+          chunkA.splitDir = x > y ? 0 : 1;
+        }
         chunkPool.push(chunkA);
       } else {
         finalChunks.push(chunkA);
@@ -172,7 +177,11 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
         x = chunkB.right - chunkB.left;
         y = chunkB.bottom - chunkB.top;
         if (x > minWidth && y > minHeight && x * y > minHeight) {
-          chunkB.splitDir = splitDir ? 0 : 1;
+          if (pass === 0) {
+            chunkB.splitDir = splitDir ? 0 : 1;
+          } else {
+            chunkB.splitDir = x > y ? 0 : 1;
+          }
           chunkPool.push(chunkB);
         } else {
           finalChunks.push(chunkB);
@@ -202,6 +211,7 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
     if (splitCount >= 10000) {
       throw new Error('Infinite loop in partitioning');
     }
+    this.hallways = hallways;
     
     // reference cells to hallways
     for (i = 0; i < hallways.length; i += 1) {

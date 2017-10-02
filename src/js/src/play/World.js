@@ -244,7 +244,7 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
     // second pass: keep connecting island rooms, it should eventually run out
     splitCount = 0;
     while (islandRooms.length > 0 && splitCount < 10000) {
-      // first pass = unchecked rooms
+      // first pass = unchecked rooms, determined by the first set of islandRooms
       // second pass = after all rooms neighboring hallways have been connected
       var chunkPool = splitCount < finalChunks.length ? hallways : this.rooms;
       chunk = islandRooms.shift();
@@ -279,33 +279,49 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
         rectCheck.right = chunk.right;
         rectCheck.bottom = chunk.bottom;
         // determine direction
-        rectCheck.left -= 2;
         var found = false;
+        // left
+        rectCheck.left -= 2;
         if (JMath.intersectRectRect(rectCheck, chunkA)) {
           found = true;
           x = chunkA.right;
-          y = Random.rangeInt(chunk.top, chunk.bottom);
+          y = Random.rangeInt(
+            Math.max(chunk.top, chunkA.top),
+            Math.min(chunk.bottom, chunkA.bottom)
+          );
         }
+        // top
         if (!found) {
           rectCheck.left = chunk.left;
           rectCheck.top -= 2;
           if (JMath.intersectRectRect(rectCheck, chunkA)) {
             found = true;
-            x = Random.rangeInt(chunk.left, chunk.right);
+            x = Random.rangeInt(
+              Math.max(chunk.left, chunkA.left),
+              Math.min(chunk.right, chunkA.right)
+            );
             y = chunkA.bottom;
           }
         }
+        // right
         if (!found) {
           rectCheck.top = chunk.top;
           rectCheck.right += 2;
           if (JMath.intersectRectRect(rectCheck, chunkA)) {
             found = true;
             x = chunkA.left - 1;
-            y = Random.rangeInt(chunk.top, chunk.bottom);
+            y = Random.rangeInt(
+              Math.max(chunk.top, chunkA.top),
+              Math.min(chunk.bottom, chunkA.bottom)
+            );
           }
         }
+        // bottom
         if (!found) {
-          x = Random.rangeInt(chunk.left, chunk.right);
+          x = Random.rangeInt(
+            Math.max(chunk.left, chunkA.left),
+            Math.min(chunk.right, chunkA.right)
+          );
           y = chunkA.top - 1;
         }
         this.setPos(x, y, World.cellTypes.door);

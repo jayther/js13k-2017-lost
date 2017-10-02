@@ -18,6 +18,10 @@ function PlayScene() {
     } else {
       this.world.scaleX = this.world.scaleY = SETTINGS.height / h;
     }
+    this.world.rooms.forEach(function (room) {
+      room.fog.visible = false;
+    });
+    this.world.hallways[0].fog.visible = false;
   }
   var speed = 200;
   var player = this.player = new Player(this, {

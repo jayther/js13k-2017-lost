@@ -1,14 +1,29 @@
 function PlayScene() {
   Scene.apply(this, arguments);
+  
+  this.gridRange = {
+    minWidth: 50,
+    maxWidth: 60,
+    minHeight: 50,
+    maxHeight: 60
+  };
+  
+  var w = Random.rangeInt(this.gridRange.minWidth, this.gridRange.maxWidth);
+  var h = Random.rangeInt(this.gridRange.minHeight, this.gridRange.maxHeight);
+  this.gridWidth = w;
+  this.gridHeight = h;
+  
   var bg = new DisplayRect({
     w: SETTINGS.width,
     h: SETTINGS.height,
     color: '#333333'
   });
   this.addChild(bg);
+  
   this.world = new World();
   this.addChild(this.world);
-  this.world.generate();
+  this.world.generate(w, h);
+  
   var seeWholeWorld = false;
   if (seeWholeWorld) {
     var w = this.world.gridWidth * this.world.cellSize;
@@ -23,15 +38,19 @@ function PlayScene() {
     });
     this.world.hallways[0].fog.visible = false;
   }
+  
   var speed = 200;
+  
   var player = this.player = new Player(this, {
     world: this.world
   });
   this.world.addChild(this.player);
+  
   var room = Random.pick(this.world.rooms);
   this.player.x = (room.left + room.right) / 2 * this.world.cellSize;
   this.player.y = (room.top + room.bottom) / 2 * this.world.cellSize;
   this.player.updateAABB();
+  
   var vel = this.player.vel;
   this.keys = [];
   this.aKey = KB(KB.keys.a, function () {

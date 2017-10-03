@@ -3,12 +3,6 @@ function World() {
   DisplayContainer.apply(this, arguments);
   this.grid = {};
   this.cellSize = 20;
-  this.gridRange = {
-    minWidth: 50,
-    maxWidth: 60,
-    minHeight: 50,
-    maxHeight: 60
-  };
   this.hallwayMinChunkArea = 1000;
   this.hallwayMinChunkWidth = 20;
   this.hallwayMinChunkHeight = 20;
@@ -43,9 +37,8 @@ World.relativePos = [
 ];
 
 World.prototype = extendPrototype(DisplayContainer.prototype, {
-  generate: function () {
-    var w = Random.rangeInt(this.gridRange.minWidth, this.gridRange.maxWidth);
-    var h = Random.rangeInt(this.gridRange.minHeight, this.gridRange.maxHeight);
+  generate: function (width, height) {
+    var w = width, h = height;
     this.bg.setDimensions(w * this.cellSize, h * this.cellSize);
     
     // building walls

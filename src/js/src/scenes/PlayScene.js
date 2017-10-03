@@ -8,10 +8,8 @@ function PlayScene() {
     maxHeight: 60
   };
   
-  var w = Random.rangeInt(this.gridRange.minWidth, this.gridRange.maxWidth);
-  var h = Random.rangeInt(this.gridRange.minHeight, this.gridRange.maxHeight);
-  this.gridWidth = w;
-  this.gridHeight = h;
+  this.gridWidth = Random.rangeInt(this.gridRange.minWidth, this.gridRange.maxWidth);
+  this.gridHeight = Random.rangeInt(this.gridRange.minHeight, this.gridRange.maxHeight);
   
   var bg = new DisplayRect({
     w: SETTINGS.width,
@@ -22,7 +20,7 @@ function PlayScene() {
   
   this.world = new World();
   this.addChild(this.world);
-  this.world.generate(w, h);
+  this.world.generate(this.gridWidth, this.gridHeight);
   
   var seeWholeWorld = false;
   if (seeWholeWorld) {

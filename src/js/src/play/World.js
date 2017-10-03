@@ -264,7 +264,7 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
     while (islandRooms.length > 0 && splitCount < 10000) {
       // first pass = unchecked rooms, determined by the first set of islandRooms
       // second pass = after all rooms neighboring hallways have been connected
-      var chunkPool = splitCount < finalChunks.length ? hallways : this.rooms;
+      chunkPool = splitCount < finalChunks.length ? hallways : this.rooms;
       chunk = islandRooms.shift();
       // check left/right separately from top/bottom to avoid adding diagonal neighbors
       rectCheck = extend({}, chunk);

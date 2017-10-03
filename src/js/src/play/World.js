@@ -395,7 +395,8 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
     var color = null,
       aabb = null,
       halfSize = this.cellSize / 2,
-      item = null;
+      item = null,
+      passable = true;
     switch (type) {
     case World.cellTypes.outerWall: // wall
       aabb = new AABB(
@@ -404,13 +405,17 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
         halfSize,
         halfSize
       );
+      passable = false;
       break;
     case World.cellTypes.ground: // floor
+      passable = true;
       break;
     case World.cellTypes.door:
       color = '#00aa00';
+      passable = true;
       break;
     case World.cellTypes.roomGround:
+      passable = true;
       break;
     }
     if (color) {
@@ -426,7 +431,8 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
       type: type,
       item: item,
       aabb: aabb,
-      room: room
+      room: room,
+      passable: passable
     };
   },
   getCell: function (x, y) {

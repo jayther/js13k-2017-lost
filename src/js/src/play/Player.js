@@ -34,7 +34,7 @@ Player.prototype = extendPrototype(DisplayContainer.prototype, {
     var relX, relY;
     for (i = 0; i < cells.length; i += 1) {
       cell = cells[i];
-      if (cell.aabb && cell.aabb.intersectsWith(this.aabb)) {
+      if (!cell.passable && cell.aabb && cell.aabb.intersectsWith(this.aabb)) {
         relX = this.aabb.x - cell.aabb.x;
         relY = this.aabb.y - cell.aabb.y;
         if (Math.abs(relX) > Math.abs(relY)) {

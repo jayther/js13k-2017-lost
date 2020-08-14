@@ -4,7 +4,8 @@
   "description": "js13k 2017 entry",
   "main": "index.js",
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "gulp": "gulp"
   },
   "repository": {
     "type": "git",
@@ -27,18 +28,18 @@
     "del": "^3.0.0",
     "express": "^4.15.4",
     "fs-extra": "^4.0.1",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^7.0.0",
+    "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-htmlmin": "^3.0.0",
     "gulp-micro": "^1.1.0",
     "gulp-mustache": "^3.0.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
-    "gulp-sequence": "^0.4.6",
     "gulp-size": "^2.1.0",
     "gulp-uglify": "^3.0.0",
-    "gulp-zip": "^4.0.0",
-    "q": "^1.5.0"
+    "gulp-zip": "^4.0.0"
+  },
+  "dependencies": {
+    "eslint": "^7.6.0"
   }
 }

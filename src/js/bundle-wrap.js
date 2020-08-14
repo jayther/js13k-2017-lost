@@ -576,7 +576,6 @@ World.prototype = extendPrototype(DisplayContainer.prototype, {
         }
       }
     }
-    console.log('chunkPool:', chunkPool.length);
     if (splitCount >= 10000) {
       throw new Error('Infinite loop in partitioning');
     }
